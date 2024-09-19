@@ -1,6 +1,5 @@
 import { createLogger } from '~/src/helpers/logging/logger.js'
 import { config } from '~/src/config/index.js'
-import { getContainer } from '~/src/api/gather-data/services/blob-client.js'
 import {
   getFinderGrants,
   getNumberOfGrants
@@ -16,31 +15,26 @@ import {
 
 export async function gatherData() {
   const logger = createLogger()
-  const containerClient = await getContainer()
   const searchClient = getSearchClient()
   const searchSummariesClient = getSearchSummariesClient()
 
   const totalFarmingFinderGrants = await getNumberOfGrants()
 
   const responseSfi = await processFarmingFinderData({
-    containerClient,
     searchClient,
     count: totalFarmingFinderGrants,
     searchSummariesClient
   })
 
   const responseWoodland = await processWoodlandData({
-    containerClient,
     searchClient,
     searchSummariesClient
   })
   const responseVetVisits = await processVetVisitsData({
-    containerClient,
     searchClient,
     searchSummariesClient
   })
   const responseWoodlandOffer = await processWoodlandOfferData({
-    containerClient,
     searchClient,
     searchSummariesClient
   })
@@ -66,7 +60,6 @@ export async function gatherData() {
 }
 
 const processVetVisitsData = async ({
-  containerClient,
   searchClient,
   searchSummariesClient
 }) => {
@@ -76,7 +69,6 @@ const processVetVisitsData = async ({
   const result = await processGrants({
     grants,
     scheme,
-    containerClient,
     searchClient,
     searchSummariesClient
   })
@@ -84,18 +76,13 @@ const processVetVisitsData = async ({
   return result
 }
 
-const processWoodlandData = async ({
-  containerClient,
-  searchClient,
-  searchSummariesClient
-}) => {
+const processWoodlandData = async ({ searchClient, searchSummariesClient }) => {
   const scheme = config.get('woodlandCreation')
   const grants = await getWoodlandGrants()
 
   const result = await processGrants({
     grants,
     scheme,
-    containerClient,
     searchClient,
     searchSummariesClient
   })
@@ -104,7 +91,6 @@ const processWoodlandData = async ({
 }
 
 const processWoodlandOfferData = async ({
-  containerClient,
   searchClient,
   searchSummariesClient
 }) => {
@@ -114,7 +100,6 @@ const processWoodlandOfferData = async ({
   const result = await processGrants({
     grants,
     scheme,
-    containerClient,
     searchClient,
     searchSummariesClient
   })
@@ -123,7 +108,6 @@ const processWoodlandOfferData = async ({
 }
 
 const processFarmingFinderData = async ({
-  containerClient,
   searchClient,
   count,
   searchSummariesClient
@@ -134,7 +118,6 @@ const processFarmingFinderData = async ({
   const result = await processGrants({
     grants,
     scheme,
-    containerClient,
     searchClient,
     searchSummariesClient
   })
@@ -145,7 +128,6 @@ const processFarmingFinderData = async ({
 const processGrants = async ({
   grants,
   scheme,
-  containerClient,
   searchClient,
   searchSummariesClient
 }) => {
@@ -153,7 +135,6 @@ const processGrants = async ({
     const { chunkCount, processedGrants } = await process({
       grants,
       scheme,
-      containerClient,
       searchClient,
       searchSummariesClient
     })

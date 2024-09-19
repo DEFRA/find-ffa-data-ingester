@@ -14,7 +14,7 @@ import {
 import {
   getManifest,
   uploadManifest
-} from '~/src/api/gather-data/services/blob-client.js'
+} from '~/src/api/gather-data/services/s3-client.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 
 /**
@@ -23,17 +23,16 @@ import { createLogger } from '~/src/helpers/logging/logger.js'
 
 /**
  * Chunks and uploads grants to AI Search & removes old grants from AI Search
- * @param {{ grants: import('../services/govuk-api.js').Grant[], scheme: { manifestFile: string, schemeName: string }, containerClient: unknown, searchClient: SearchClient, searchSummariesClient: SearchClient }} props
+ * @param {{ grants: import('../services/govuk-api.js').Grant[], scheme: { manifestFile: string, schemeName: string }, searchClient: SearchClient, searchSummariesClient: SearchClient }} props
  * @returns {Promise<{ chunkCount: number, processedGrants: Manifest[] }>}
  */
 const process = async ({
   grants,
   scheme,
-  containerClient,
   searchClient,
   searchSummariesClient
 }) => {
-  const manifestGrants = await getManifest(scheme.manifestFile, containerClient)
+  const manifestGrants = await getManifest(scheme.manifestFile)
 
   const removedGrants = manifestGrants.filter((manifestGrant) =>
     isGrantRemoved(manifestGrant, grants)
@@ -48,27 +47,25 @@ const process = async ({
     grants,
     manifestGrants: manifestData,
     schemeName: scheme.schemeName,
-    containerClient,
     searchClient,
     searchSummariesClient
   })
 
   manifestData.push(...result.processedGrants)
-  await uploadManifest(manifestData, scheme.manifestFile, containerClient)
+  await uploadManifest(manifestData, scheme.manifestFile)
 
   return result
 }
 
 /**
  * Chunks and uploads grants to AI Search
- * @param {{ grants: import('../services/govuk-api.js').Grant[], manifestGrants: Manifest[], schemeName: string, containerClient: unknown, searchClient: SearchClient, searchSummariesClient: SearchClient, summaryTokenLimit?: number }} props
+ * @param {{ grants: import('../services/govuk-api.js').Grant[], manifestGrants: Manifest[], schemeName: string, searchClient: SearchClient, searchSummariesClient: SearchClient, summaryTokenLimit?: number }} props
  * @returns {Promise<{ chunkCount: number, processedGrants: Manifest[] }>}
  */
 const processGrants = async ({
   grants,
   manifestGrants,
   schemeName,
-  // containerClient,
   searchClient,
   searchSummariesClient,
   summaryTokenLimit = 100

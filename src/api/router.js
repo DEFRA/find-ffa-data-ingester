@@ -1,5 +1,6 @@
 import { health } from '~/src/api/health/index.js'
 import { gatherData } from '~/src/api/gather-data/index.js'
+import { files } from '~/src/api/files/index.js'
 
 /**
  * @satisfies { import('@hapi/hapi').ServerRegisterPluginObject<*> }
@@ -12,7 +13,7 @@ const router = {
       await server.register([health])
 
       // Application specific routes
-      await server.register([gatherData])
+      await server.register([gatherData, files])
     }
   }
 }

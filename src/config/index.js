@@ -206,6 +206,24 @@ const config = convict({
       default: '',
       env: 'AZURE_OPENAI_MODEL_NAME'
     }
+  },
+  aws: {
+    region: {
+      format: String,
+      default: 'eu-west-2',
+      env: 'AWS_REGION'
+    },
+    s3bucket: {
+      format: String,
+      default: '',
+      env: 'S3_BUCKET'
+    },
+    s3Endpoint: {
+      doc: 'The S3 HTTP(S) endpoint, if required (e.g. a local development dev service). Activating this will force path style addressing for compatibility with Localstack.',
+      format: String,
+      default: '',
+      env: 'S3_ENDPOINT'
+    }
   }
 })
 
