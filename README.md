@@ -1,40 +1,36 @@
 # find-ffa-data-ingester
 
-Core delivery platform Node.js Backend Template.
+Populates the FFA Vector store. Based on the Core delivery platform Node.js Backend Template.
 
-- [Requirements](#requirements)
-  - [Node.js](#nodejs)
-- [Local development](#local-development)
-  - [Setup](#setup)
-  - [Development](#development)
-  - [Testing](#testing)
-  - [Production](#production)
-  - [Npm scripts](#npm-scripts)
-  - [Update dependencies](#update-dependencies)
-  - [Formatting](#formatting)
-    - [Windows prettier issue](#windows-prettier-issue)
-- [API endpoints](#api-endpoints)
-- [Calling API endpoints](#calling-api-endpoints)
-  - [Postman](#postman)
-- [Development helpers](#development-helpers)
-  - [MongoDB Locks](#mongodb-locks)
-- [Docker](#docker)
-  - [Development image](#development-image)
-  - [Production image](#production-image)
-  - [Docker Compose](#docker-compose)
-  - [Dependabot](#dependabot)
-  - [SonarCloud](#sonarcloud)
-- [Licence](#licence)
-  - [About the licence](#about-the-licence)
+- [find-ffa-data-ingester](#find-ffa-data-ingester)
+  - [Requirements](#requirements)
+    - [Node.js](#nodejs)
+  - [Local development](#local-development)
+    - [Setup](#setup)
+    - [Development](#development)
+    - [Testing](#testing)
+    - [Production](#production)
+    - [Npm scripts](#npm-scripts)
+    - [Update dependencies](#update-dependencies)
+    - [Formatting](#formatting)
+      - [Windows prettier issue](#windows-prettier-issue)
+  - [Development helpers](#development-helpers)
+    - [Secrets \& Environment Variables](#secrets--environment-variables)
+    - [MongoDB Locks](#mongodb-locks)
+  - [Docker](#docker)
+    - [Development image](#development-image)
+    - [Production image](#production-image)
+    - [Docker Compose](#docker-compose)
+    - [Dependabot](#dependabot)
+    - [SonarCloud](#sonarcloud)
+  - [Licence](#licence)
+    - [About the licence](#about-the-licence)
 
 ## Requirements
 
 ### Node.js
 
-Please install [Node.js](http://nodejs.org/) `>= v18` and [npm](https://nodejs.org/) `>= v9`. You will find it
-easier to use the Node Version Manager [nvm](https://github.com/creationix/nvm)
-
-To use the correct version of Node.js for this application, via nvm:
+To use the correct version of Node.js for this application, via Node Version Manager [nvm](https://github.com/creationix/nvm):
 
 ```bash
 cd find-ffa-data-ingester
@@ -51,9 +47,13 @@ Install application dependencies:
 npm install
 ```
 
+Then setup [Secrets \& Environment Variables](#secrets--environment-variables)
+
 ### Development
 
-To run the application in `development` mode run:
+Once setup (above), get the dependencies up and running using [Docker Compose - see below](#docker-compose).
+
+Then run the application in `development` mode:
 
 ```bash
 npm run dev
@@ -105,26 +105,13 @@ If you are having issues with formatting of line breaks on Windows update your g
 git config --global core.autocrlf false
 ```
 
-## API endpoints
-
-| Endpoint             | Description                    |
-| :------------------- | :----------------------------- |
-| `GET: /health`       | Health                         |
-| `GET: /example    `  | Example API (remove as needed) |
-| `GET: /example/<id>` | Example API (remove as needed) |
-
-## Calling API endpoints
-
-### Postman
-
-A [Postman](https://www.postman.com/) collection and environment are available for making calls to the
-find-ffa-data-ingester API.
-Simply import the collection and environment into Postman.
-
-- [CDP Node Backend Template Postman Collection](postman/find-ffa-data-ingester.postman_collection.json)
-- [CDP Node Backend Template Postman Environment](postman/find-ffa-data-ingester.postman_environment.json)
-
 ## Development helpers
+
+### Secrets & Environment Variables
+
+Create a `.env` file by making a copy of the `.env.example` and adding the missing secrets.
+
+Do not add secrets to `.env.example` as this is under version control!
 
 ### MongoDB Locks
 
@@ -206,8 +193,6 @@ A local environment with:
 - Localstack for AWS services (S3, SQS)
 - Redis
 - MongoDB
-- This service.
-- A commented out frontend example.
 
 ```bash
 docker compose up --build -d
