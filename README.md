@@ -2,31 +2,30 @@
 
 Core delivery platform Node.js Backend Template.
 
-- [find-ffa-data-ingester](#find-ffa-data-ingester)
-  - [Requirements](#requirements)
-    - [Node.js](#nodejs)
-  - [Local development](#local-development)
-    - [Setup](#setup)
-    - [Development](#development)
-    - [Testing](#testing)
-    - [Production](#production)
-    - [Npm scripts](#npm-scripts)
-    - [Update dependencies](#update-dependencies)
-    - [Formatting](#formatting)
-      - [Windows prettier issue](#windows-prettier-issue)
-  - [API endpoints](#api-endpoints)
-  - [Calling API endpoints](#calling-api-endpoints)
-    - [Postman](#postman)
-  - [Development helpers](#development-helpers)
-    - [MongoDB Locks](#mongodb-locks)
-  - [Docker](#docker)
-    - [Development image](#development-image)
-    - [Production image](#production-image)
-    - [Docker Compose](#docker-compose)
-    - [Dependabot](#dependabot)
-    - [SonarCloud](#sonarcloud)
-  - [Licence](#licence)
-    - [About the licence](#about-the-licence)
+- [Requirements](#requirements)
+  - [Node.js](#nodejs)
+- [Local development](#local-development)
+  - [Setup](#setup)
+  - [Development](#development)
+  - [Testing](#testing)
+  - [Production](#production)
+  - [Npm scripts](#npm-scripts)
+  - [Update dependencies](#update-dependencies)
+  - [Formatting](#formatting)
+    - [Windows prettier issue](#windows-prettier-issue)
+- [API endpoints](#api-endpoints)
+- [Calling API endpoints](#calling-api-endpoints)
+  - [Postman](#postman)
+- [Development helpers](#development-helpers)
+  - [MongoDB Locks](#mongodb-locks)
+- [Docker](#docker)
+  - [Development image](#development-image)
+  - [Production image](#production-image)
+  - [Docker Compose](#docker-compose)
+  - [Dependabot](#dependabot)
+  - [SonarCloud](#sonarcloud)
+- [Licence](#licence)
+  - [About the licence](#about-the-licence)
 
 ## Requirements
 
@@ -240,5 +239,3 @@ information providers in the public sector to license the use and re-use of thei
 licence.
 
 It is designed to encourage use and re-use of information freely and flexibly, with only a few conditions.
-
-Testing Git commits on new machine
