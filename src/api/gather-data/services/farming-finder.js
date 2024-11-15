@@ -1,8 +1,7 @@
-import axios from 'axios'
-
 import { config } from '~/src/config/index.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
 import { getGovukContent } from '~/src/api/gather-data/services/govuk-api.js'
+import { proxyFetch } from '~/src/helpers/proxy-fetch.js'
 
 /**
  * Get grants from "Find funding for land or farms" finder
@@ -34,10 +33,11 @@ async function getFinderGrants(count) {
  */
 async function getLinksFromSearchApi(count) {
   const url = `${config.get('farmingFinder.searchUrl')}&count=${count}`
-  const response = await axios.get(url)
-  const searchApiResponse = response.data
+  const response = await proxyFetch(url, {})
 
-  const links = searchApiResponse.results.map(
+  const json = await response.json()
+
+  const links = json.results.map(
     (result) => config.get('farmingFinder.findFarmingUrl') + result.link
   )
 
@@ -49,11 +49,14 @@ async function getLinksFromSearchApi(count) {
  * @returns {Promise<number>}
  */
 async function getNumberOfGrants() {
+  const logger = createLogger()
   const url = `${config.get('farmingFinder.searchUrl')}`
-  const response = await axios.get(url)
-  const searchAPIResponse = response.data
+  const response = await proxyFetch(url, {})
+  const json = await response.json()
 
-  return searchAPIResponse.total
+  logger.info(`Fetch ${url}. Status Code ${response.status}`)
+
+  return json.total
 }
 
 export { getFinderGrants, getNumberOfGrants }
