@@ -19,13 +19,16 @@ const onFailedAttempt = async (error) => {
  */
 const generateEmbedding = async (chunk) => {
   const logger = createLogger()
-  const key = config.get('azureOpenAI.openAiKey') ? config.get('azureOpenAI.openAiKey').substring(0,2) : 'not set'
-  logger.debug(`generateEmbedding ${config.get('azureOpenAI.openAiInstanceName')} ${key}`)
+  const proxy = config.get('httpsProxy') ?? config.get('httpProxy')
+  logger.debug(
+    `generateEmbedding ${config.get('azureOpenAI.openAiInstanceName')} ${proxy}`
+  )
   const embeddings = new OpenAIEmbeddings({
     azureOpenAIApiInstanceName: config.get('azureOpenAI.openAiInstanceName'),
     azureOpenAIApiKey: config.get('azureOpenAI.openAiKey'),
     azureOpenAIApiDeploymentName: 'text-embedding-ada-002',
     azureOpenAIApiVersion: '2024-02-01',
+    azureOpenAIBasePath: proxy ?? undefined,
     onFailedAttempt
   })
 
