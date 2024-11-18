@@ -28,7 +28,7 @@ const generateEmbedding = async (chunk) => {
     azureOpenAIApiKey: config.get('azureOpenAI.openAiKey'),
     azureOpenAIApiDeploymentName: 'text-embedding-ada-002',
     azureOpenAIApiVersion: '2024-02-01',
-    azureOpenAIBasePath: proxy ?? undefined,
+    configuration: { baseURL: proxy },
     onFailedAttempt
   })
 
