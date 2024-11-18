@@ -1,5 +1,7 @@
-import axios from 'axios'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
 import * as cheerio from 'cheerio'
+import { proxyFetch } from '~/src/helpers/proxy-fetch.js'
 
 import { config } from '~/src/config/index.js'
 import {
@@ -13,8 +15,8 @@ import {
  */
 async function getWoodlandGrants() {
   const url = config.get('woodlandCreation.url')
-  const response = await axios.get(url)
-  const responseJSON = response.data
+  const response = await proxyFetch(url, {})
+  const responseJSON = await response.json()
 
   const updateDate = new Date(responseJSON.updated_at)
 

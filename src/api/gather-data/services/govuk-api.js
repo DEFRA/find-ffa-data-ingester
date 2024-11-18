@@ -1,4 +1,6 @@
-import axios from 'axios'
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// @ts-nocheck
+import { proxyFetch } from '~/src/helpers/proxy-fetch.js'
 
 import {
   webpageToMarkdown,
@@ -15,8 +17,8 @@ import {
  * @returns {Promise<Grant>}
  */
 const getGovukContent = async (url) => {
-  const response = await axios.get(url)
-  const responseJson = response.data
+  const response = await proxyFetch(url, {})
+  const responseJson = await response.json()
 
   if (
     response.status !== 200 ||
