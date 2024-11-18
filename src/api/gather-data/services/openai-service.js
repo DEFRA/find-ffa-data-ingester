@@ -6,7 +6,9 @@ import { createLogger } from '~/src/helpers/logging/logger.js'
 // eslint-disable-next-line @typescript-eslint/require-await
 const onFailedAttempt = async (error) => {
   if (error.retriesLeft === 0) {
-    throw new Error(`Failed to get embeddings: ${error}`)
+    const logger = createLogger()
+    logger.error(error, 'Failed to get embeddings')
+    throw error
   }
 }
 
@@ -16,6 +18,9 @@ const onFailedAttempt = async (error) => {
  * @returns {Promise<number[]>}
  */
 const generateEmbedding = async (chunk) => {
+  const logger = createLogger()
+  const key = config.get('azureOpenAI.openAiKey') ? config.get('azureOpenAI.openAiKey').substring(0,2) : 'not set'
+  logger.debug(`generateEmbedding ${config.get('azureOpenAI.openAiInstanceName')} ${key}`)
   const embeddings = new OpenAIEmbeddings({
     azureOpenAIApiInstanceName: config.get('azureOpenAI.openAiInstanceName'),
     azureOpenAIApiKey: config.get('azureOpenAI.openAiKey'),
