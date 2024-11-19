@@ -20,16 +20,13 @@ const onFailedAttempt = async (error) => {
  * @returns {Promise<number[]>}
  */
 const generateEmbedding = async (chunk) => {
-  const logger = createLogger()
   const proxyUrlConfig = config.get('httpsProxy') ?? config.get('httpProxy')
-  let httpsProxyAgent
+  let httpAgent
   if (proxyUrlConfig) {
     const proxyUrl = new URL(proxyUrlConfig)
-    httpsProxyAgent = new HttpsProxyAgent(proxyUrl)
+    httpAgent = new HttpsProxyAgent(proxyUrl)
   }
-  logger.debug(
-    `generateEmbedding ${config.get('azureOpenAI.openAiInstanceName')} ${proxyUrlConfig}`
-  )
+
   const embeddings = new OpenAIEmbeddings({
     azureOpenAIApiInstanceName: config.get('azureOpenAI.openAiInstanceName'),
     azureOpenAIApiKey: config.get('azureOpenAI.openAiKey'),
@@ -37,14 +34,12 @@ const generateEmbedding = async (chunk) => {
     azureOpenAIApiVersion: '2024-02-01',
     verbose: true,
     configuration: {
-      httpAgent: httpsProxyAgent
+      httpAgent
     },
     onFailedAttempt
   })
 
-  logger.debug('embedDocuments - start')
   const embedding = await embeddings.embedDocuments([chunk])
-  logger.debug('embedDocuments - end')
 
   return embedding[0]
 }

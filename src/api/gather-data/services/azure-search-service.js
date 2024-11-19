@@ -48,10 +48,24 @@ const deleteDocuments = async (keys, searchClient) => {
 
 const getSearchClient = () => {
   const { searchUrl, indexName, searchApiKey } = config.get('azureOpenAI')
+  const proxyUrlConfig = config.get('httpsProxy') ?? config.get('httpProxy')
+  let proxyOptions
+  if (proxyUrlConfig) {
+    const proxyUrl = new URL(proxyUrlConfig)
+    const port = proxyUrl.protocol.toLowerCase() === 'http:' ? 80 : 443
+    proxyOptions = {
+      host: proxyUrl.href,
+      port
+    }
+  }
+
   const searchClient = new SearchClient(
     searchUrl,
     indexName,
-    new AzureKeyCredential(searchApiKey)
+    new AzureKeyCredential(searchApiKey),
+    {
+      proxyOptions
+    }
   )
 
   return searchClient
