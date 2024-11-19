@@ -51,11 +51,22 @@ const generateEmbedding = async (chunk) => {
  * @returns {Promise<string>} - The generated summary
  */
 const generateShortSummary = async (text, summaryTokenLimit = 100) => {
+  const proxyUrlConfig = config.get('httpsProxy') ?? config.get('httpProxy')
+  let httpAgent
+  if (proxyUrlConfig) {
+    const proxyUrl = new URL(proxyUrlConfig)
+    httpAgent = new HttpsProxyAgent(proxyUrl)
+  }
+
   const model = new ChatOpenAI({
     azureOpenAIApiInstanceName: config.get('azureOpenAI.openAiInstanceName'),
     azureOpenAIApiKey: config.get('azureOpenAI.openAiKey'),
     azureOpenAIApiDeploymentName: 'gpt-35-turbo-16k',
     azureOpenAIApiVersion: '2024-02-01',
+    verbose: true,
+    configuration: {
+      httpAgent
+    },
     onFailedAttempt
   })
 
