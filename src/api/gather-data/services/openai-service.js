@@ -1,4 +1,6 @@
 import { OpenAIEmbeddings, ChatOpenAI } from '@langchain/openai'
+import { URL } from 'node:url'
+import { HttpsProxyAgent } from 'https-proxy-agent'
 
 import { config } from '~/src/config/index.js'
 import { createLogger } from '~/src/helpers/logging/logger.js'
@@ -19,20 +21,30 @@ const onFailedAttempt = async (error) => {
  */
 const generateEmbedding = async (chunk) => {
   const logger = createLogger()
-  const proxy = config.get('httpsProxy') ?? config.get('httpProxy')
+  const proxyUrlConfig = config.get('httpsProxy') ?? config.get('httpProxy')
+  let httpsProxyAgent
+  if (proxyUrlConfig) {
+    const proxyUrl = new URL(proxyUrlConfig)
+    httpsProxyAgent = new HttpsProxyAgent(proxyUrl)
+  }
   logger.debug(
-    `generateEmbedding ${config.get('azureOpenAI.openAiInstanceName')} ${proxy}`
+    `generateEmbedding ${config.get('azureOpenAI.openAiInstanceName')} ${proxyUrlConfig}`
   )
   const embeddings = new OpenAIEmbeddings({
     azureOpenAIApiInstanceName: config.get('azureOpenAI.openAiInstanceName'),
     azureOpenAIApiKey: config.get('azureOpenAI.openAiKey'),
     azureOpenAIApiDeploymentName: 'text-embedding-ada-002',
     azureOpenAIApiVersion: '2024-02-01',
-    configuration: { baseURL: proxy },
+    verbose: true,
+    configuration: {
+      httpAgent: httpsProxyAgent
+    },
     onFailedAttempt
   })
 
+  logger.debug('embedDocuments - start')
   const embedding = await embeddings.embedDocuments([chunk])
+  logger.debug('embedDocuments - end')
 
   return embedding[0]
 }
