@@ -85,7 +85,7 @@ const generateShortSummary = async (text, summaryTokenLimit = 100) => {
   } catch (error) {
     const logger = createLogger()
     try {
-      logger.error('Error generating summary using openai:', error)
+      logger.error(error, 'Error generating summary using openai')
       if (typeof document !== 'string') {
         logger.error('Document is not a string', document)
         return ''
@@ -101,7 +101,7 @@ const generateShortSummary = async (text, summaryTokenLimit = 100) => {
 
       return summary.slice(0, lastSentenceEnd + 1)
     } catch (error) {
-      logger.error('Error generating summary using fallback:', error)
+      logger.error(error, 'Error generating summary using fallback')
       return ''
     }
   }
