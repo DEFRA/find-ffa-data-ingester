@@ -60,7 +60,7 @@ const generateShortSummary = async (text, summaryTokenLimit = 100) => {
   const model = new ChatOpenAI({
     azureOpenAIApiInstanceName: config.get('azureOpenAI.openAiInstanceName'),
     azureOpenAIApiKey: config.get('azureOpenAI.openAiKey'),
-    azureOpenAIApiDeploymentName: 'gpt-35-turbo-16k',
+    azureOpenAIApiDeploymentName: 'text-embedding-ada-002',
     azureOpenAIApiVersion: '2024-02-01',
     configuration: {
       httpAgent
